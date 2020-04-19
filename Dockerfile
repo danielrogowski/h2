@@ -2,23 +2,27 @@
 FROM openjdk:8-jre-slim
 
 # Maintainer
-MAINTAINER Damien Coraboeuf <damien.coraboeuf@nemerosa.com>
+MAINTAINER Daniel Rogowski <https://github.com/danielrogowski>
 
-# Port to expose
+# Ports to expose
+# web server
 EXPOSE 8082
-EXPOSE 9082
+# tcp server
+EXPOSE 9092
 
-# Volume containing the H2 data
-VOLUME /usr/lib/h2
+# Volume for the h2 binary and the script
+VOLUME /var/lib/h2
+# Volume containing the H2 data will be provided by a volume mount when running the container
+VOLUME /var/lib/h2/databases
 
 # H2 version
 ENV H2_VERSION "1.4.200"
 
 # Download
-ADD "http://repo1.maven.org/maven2/com/h2database/h2/${H2_VERSION}/h2-${H2_VERSION}.jar" /var/lib/h2/h2.jar
+ADD "https://repo1.maven.org/maven2/com/h2database/h2/${H2_VERSION}/h2-${H2_VERSION}.jar" /var/lib/h2/h2.jar
 
 # Startup script
-COPY h2.sh /var/lib/h2/
+COPY h2.sh /var/lib/h2/.
 
 # Rights
 RUN chmod u+x /var/lib/h2/h2.sh

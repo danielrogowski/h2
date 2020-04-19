@@ -2,14 +2,35 @@ This image runs a [H2 database](http://h2database.com/) in server mode.
 
 ### Quick Start
 
-To run this image:
+Clone the repo and switch to the folder:
 
 ```bash
-docker container run \
-   --publish 9092:9082 \
+git clone https://github.com/danielrogowski/h2.git h2-docker
+cd h2-docker
+```
+
+To create an image from the Dockerfile:
+
+```bash
+docker build -t h2-server_1.4.200_image .
+```
+
+To create a volume on the host to be used by the container:
+
+```bash
+docker volume create h2-server_1.4.200
+```
+
+To run a container using the image:
+
+```bash
+docker run \
+   --publish 8082:8082 \
+   --publish 9092:9092 \
    --detach \
-   --name h2 \
-   nemerosa/h2
+   --name h2-server_1.4.200 \
+   --mount source=h2-server_1.4.200,target=/var/lib/h2/databases \
+   h2-server_1.4.200_image
 ```
 
 The database can then be accessed using the following JDBC URL:
@@ -22,18 +43,7 @@ jdbc:h2:tcp://localhost/yourdb
 
 ### Data Volume
 
-The `/usr/lib/h2`, which contains the H2 databases is also exposed as a
-volume. Therefore, you can expose this volume on the host:
-
-```bash
---volume /my/path/on/host:/usr/lib/h2
-```
-
-or as a named volume:
-
-```bash
---volume h2:/usr/lib/h2
-```
+All data persisted by your h2 database running inside the container will be written to the docker volume 'h2-server_1.4.200' residing on the host. Therefore you easily back it up if you want to. Please refer to 'https://hub.docker.com/p/loomchild/volume-backup'.
 
 ### Configuration Options
 
