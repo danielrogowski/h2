@@ -36,7 +36,19 @@ docker run \
 The database can then be accessed using the following JDBC URL:
 
 ```
-jdbc:h2:tcp://localhost/yourdb
+jdbc:h2:tcp://localhost:9092/yourdb
+```
+
+Don't forget to change the sa user's password by connection to the web console:
+
+```browser
+http://localhost:8082
+```
+
+Then logging in using jdbc connection credentials mentioned above and execute:
+
+```web console
+ALTER USER sa SET PASSWORD 'your new password';
 ```
 
 (assuming your Docker host is also `localhost`)
